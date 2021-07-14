@@ -7,14 +7,19 @@
 #ifndef XYSSL_SM3_H
 #define XYSSL_SM3_H
 
+#if defined(COMPILER_16)
+typedef unsigned long      uint_32;
+#else
+typedef unsigned int       uint_32;
+#endif
 
 /**
  * \brief          SM3 context structure
  */
 typedef struct
 {
-	unsigned long total[2];     /*!< number of bytes processed  */
-	unsigned long state[8];     /*!< intermediate digest state  */
+	uint_32 total[2];     /*!< number of bytes processed  */
+	uint_32 state[8];     /*!< intermediate digest state  */
 	unsigned char buffer[64];   /*!< data block being processed */
 
 	unsigned char ipad[64];     /*!< HMAC: inner padding        */

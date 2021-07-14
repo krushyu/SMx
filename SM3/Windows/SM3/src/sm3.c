@@ -16,10 +16,10 @@
 #ifndef GET_ULONG_BE
 #define GET_ULONG_BE(n,b,i)                             \
 {                                                       \
-    (n) = ( (unsigned long) (b)[(i)    ] << 24 )        \
-        | ( (unsigned long) (b)[(i) + 1] << 16 )        \
-        | ( (unsigned long) (b)[(i) + 2] <<  8 )        \
-        | ( (unsigned long) (b)[(i) + 3]       );       \
+    (n) = ( (uint_32) (b)[(i)    ] << 24 )        \
+        | ( (uint_32) (b)[(i) + 1] << 16 )        \
+        | ( (uint_32) (b)[(i) + 2] <<  8 )        \
+        | ( (uint_32) (b)[(i) + 3]       );       \
 }
 #endif
 
@@ -54,10 +54,10 @@ void sm3_starts( sm3_context *ctx )
 
 static void sm3_process( sm3_context *ctx, unsigned char data[64] )
 {
-	unsigned long SS1, SS2, TT1, TT2, W[68], W1[64];
-	unsigned long A, B, C, D, E, F, G, H;
-	unsigned long T[64];
-	unsigned long Temp1, Temp2, Temp3, Temp4, Temp5;
+	uint_32 SS1, SS2, TT1, TT2, W[68], W1[64];
+	uint_32 A, B, C, D, E, F, G, H;
+	uint_32 T[64];
+	uint_32 Temp1, Temp2, Temp3, Temp4, Temp5;
 	int j;
 #ifdef _DEBUG
 	int i;
@@ -223,7 +223,7 @@ static void sm3_process( sm3_context *ctx, unsigned char data[64] )
 void sm3_update( sm3_context *ctx, unsigned char *input, int ilen )
 {
 	int fill;
-	unsigned long left;
+	uint_32 left;
 
 	if ( ilen <= 0 )
 		return;
@@ -234,7 +234,7 @@ void sm3_update( sm3_context *ctx, unsigned char *input, int ilen )
 	ctx->total[0] += ilen;
 	ctx->total[0] &= 0xFFFFFFFF;
 
-	if ( ctx->total[0] < (unsigned long) ilen )
+	if ( ctx->total[0] < (uint_32) ilen )
 		ctx->total[1]++;
 
 	if ( left && ilen >= fill )
@@ -274,8 +274,8 @@ static const unsigned char sm3_padding[64] =
  */
 void sm3_finish( sm3_context *ctx, unsigned char output[32] )
 {
-	unsigned long last, padn;
-	unsigned long high, low;
+	uint_32 last, padn;
+	uint_32 high, low;
 	unsigned char msglen[8];
 
 	high = ( ctx->total[0] >> 29 )
